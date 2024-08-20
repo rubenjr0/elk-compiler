@@ -21,6 +21,10 @@
 # TODO
 - Branding: ELK? ELG? Taurus?
 - Syntax decisions
+- Function piping
+- Partial application / currying
+- Pattern matching
+- Destructuring
 - Target: Binary? WASM? VM (own (stack vs regs), jvm, beam, ...)?
 - AST: Global scope has types, functions, entry point
 - Import system
