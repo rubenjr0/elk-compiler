@@ -1,0 +1,22 @@
+# Define a custom type
+type Flavor {
+    Orange
+    , Lemon
+}
+
+# Define a function
+my_func(flavor: Flavor, fav: Option(Flavor)) -> Bool {
+    match fav {
+        None -> True
+        Some(fav) -> fav == flavor
+    }
+}
+
+# Entry point
+main {
+    # Value assignment, type inference
+    my_fav: Option(Flavor) = Some(Orange);
+
+    # Function call
+    res = my_func(Orange, my_fav);
+}

@@ -1,0 +1,29 @@
+# Define a custom type
+type Flavor {
+    Orange
+    , Lemon
+}
+
+# Function signature
+my_func: Flavor -> Option(Flavor) -> Bool;
+
+# Pattern matching and decomposition
+my_func _ None = True;
+my_func flavor (Some fav) = flavor == fav;
+
+# Big function
+my_func flavor fav {
+    match fav {
+        None -> True
+        Some(fav) -> fav == flavor
+    }
+}
+
+# Entry point
+main {
+    # Value assignment, type inference
+    my_fav: Option(Flavor) = Some(Orange);
+
+    # Function call
+    res = my_func Orange my_fav;
+}
