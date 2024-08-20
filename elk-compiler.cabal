@@ -11,7 +11,7 @@ common warnings
 
 library
     import:           warnings
-    exposed-modules:  
+    exposed-modules:
         AST
         , AST.Type
         , AST.CustomType
@@ -21,7 +21,7 @@ library
         , Token
     -- other-modules:
     -- other-extensions:
-    build-depends:    
+    build-depends:
         base ^>=4.20.0.0
         , megaparsec >= 9.6.1 && < 9.7
         , text >= 2.1.1 && < 2.2
@@ -32,7 +32,7 @@ executable elk-compiler
     import:           warnings
     main-is:          Main.hs
     -- other-modules:
-    -- other-extensions: 
+    -- other-extensions:
     build-depends:
         base ^>=4.20.0.0
         -- These two while used in main

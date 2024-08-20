@@ -1,5 +1,6 @@
 module Token
   ( Token (..),
+    isArrow,
     isUpperIdentifier,
     isIdentifier,
   )
@@ -60,3 +61,7 @@ isUpperIdentifier _ = False
 isIdentifier :: Token -> Bool
 isIdentifier (TIdentifier _) = True
 isIdentifier _ = False
+
+isArrow :: Token -> Bool
+isArrow TArrow = True
+isArrow _ = False

@@ -1,14 +1,17 @@
 module Parser (Parser, pType, pIdentifier, pUpperIdentifier) where
 
 import AST.Type qualified as T
-import Token
 import Data.Void (Void)
 import Text.Megaparsec qualified as MP
+import Token
 
 type Parser = MP.Parsec Void [Token]
 
 pType :: Parser T.Type
-pType = do
+pType = MP.try (pFunctionType MP.<|> pNamedType)
+
+pNamedType :: Parser T.Type
+pNamedType = do
   name <- pUpperIdentifier
   case name of
     "I8" -> return T.I8
@@ -40,3 +43,16 @@ pUpperIdentifier = do
   case token of
     TUpperIdentifier name -> return name
     _ -> fail "Expected upper identifier"
+
+pFunctionType :: Parser T.Type
+pFunctionType = do
+  types <- pFunctionArgs
+  case types of
+    [t] -> return t
+    _ -> return $ T.Function (init types) (last types)
+
+pFunctionArgs :: Parser [T.Type]
+pFunctionArgs = MP.sepBy1 (pNamedType MP.<|> pSubFunction) (MP.satisfy isArrow)
+
+pSubFunction :: Parser T.Type
+pSubFunction = MP.between (MP.single TLeftParen) (MP.single TRightParen) pFunctionType
