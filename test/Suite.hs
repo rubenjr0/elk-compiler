@@ -1,6 +1,7 @@
 import AST
 import AST.CustomType qualified as CT
 import AST.Function qualified as F
+import AST.Syntax
 import AST.Type qualified as T
 import Parser
 import Parser.CustomType
@@ -72,17 +73,17 @@ main = hspec $ do
 
       it "parses a function's implementation (single line)" $ do
         let input = [TIdentifier "my_function", TIdentifier "arg1", TIdentifier "arg2", TEqual, TInt 42, TSemiColon]
-        let expected = F.FunctionImplementation "my_function" ["arg1", "arg2"] (F.SingleLineFunction $ T.LiteralIntExpr 42)
+        let expected = F.FunctionImplementation "my_function" ["arg1", "arg2"] (F.SingleLineFunction $ LiteralIntExpr 42)
         MP.parseMaybe pFunctionImplementation input `shouldBe` Just expected
 
       it "parses a function's implementation (simple block)" $ do
         let input = [TIdentifier "my_function", TIdentifier "arg1", TIdentifier "arg2", TLeftBrace, TInt 42, TRightBrace]
-        let expected = F.FunctionImplementation "my_function" ["arg1", "arg2"] (F.BlockFunction $ T.Block [] (T.LiteralIntExpr 42))
+        let expected = F.FunctionImplementation "my_function" ["arg1", "arg2"] (F.BlockFunction $ Block [] (LiteralIntExpr 42))
         MP.parseMaybe pFunctionImplementation input `shouldBe` Just expected
 
       it "parses a function's implementation (complex block)" $ do
         let input = [TIdentifier "my_function", TIdentifier "arg1", TIdentifier "arg2", TLeftBrace, TIdentifier "x", TEqual, TInt 42, TSemiColon, TIdentifier "x", TRightBrace]
-        let expected = F.FunctionImplementation "my_function" ["arg1", "arg2"] (F.BlockFunction $ T.Block [T.Assignment "x" (T.LiteralIntExpr 42)] (T.IdentifierExpr "x"))
+        let expected = F.FunctionImplementation "my_function" ["arg1", "arg2"] (F.BlockFunction $ Block [Assignment "x" (LiteralIntExpr 42)] (IdentifierExpr "x"))
         MP.parseMaybe pFunctionImplementation input `shouldBe` Just expected
 
     describe "pProgram" $ do

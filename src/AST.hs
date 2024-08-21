@@ -7,7 +7,7 @@ where
 
 import AST.CustomType
 import AST.Function (Function, FunctionImplementation)
-import AST.Type
+import AST.Syntax
 
 data Program = Program
   { program_imports :: [Import],

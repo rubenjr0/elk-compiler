@@ -8,6 +8,7 @@ module AST.Function
   )
 where
 
+import AST.Syntax
 import AST.Type
 
 -- # signature, mandatory

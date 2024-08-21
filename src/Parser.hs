@@ -10,6 +10,7 @@ module Parser
   )
 where
 
+import AST.Syntax
 import AST.Type qualified as T
 import Data.Void (Void)
 import Text.Megaparsec (Parsec, between, many, satisfy, sepBy1, single, try, (<|>))
@@ -74,49 +75,49 @@ pFunctionArgs = sepBy1 (pNamedType <|> pSubFunction) (satisfy isArrow)
 pSubFunction :: Parser T.Type
 pSubFunction = between (single TLeftParen) (single TRightParen) pFunctionType
 
-pBlock :: Parser T.Block
+pBlock :: Parser Block
 pBlock = between (single TLeftBrace) (single TRightBrace) $ do
   statements <- many $ try pStatement
   expr <- pExpr
-  return $ T.Block statements expr
+  return $ Block statements expr
 
-pStatement :: Parser T.Statement
+pStatement :: Parser Statement
 pStatement = pAssignmentStatement <|> pReturnStatement
 
-pAssignmentStatement :: Parser T.Statement
+pAssignmentStatement :: Parser Statement
 pAssignmentStatement = do
   name <- pIdentifier
   _ <- single TEqual
   expr <- pExpr
   _ <- single TSemiColon
-  return $ T.Assignment name expr
+  return $ Assignment name expr
 
-pReturnStatement :: Parser T.Statement
+pReturnStatement :: Parser Statement
 pReturnStatement = do
   _ <- single TReturn
   expr <- pExpr
-  return $ T.Return expr
+  return $ Return expr
 
-pExpr :: Parser T.Expr
+pExpr :: Parser Expr
 pExpr = pIdentifierExpr <|> pLiteralInt <|> pIf
 
-pIdentifierExpr :: Parser T.Expr
+pIdentifierExpr :: Parser Expr
 pIdentifierExpr = do
   identifier <- pIdentifier
-  return $ T.IdentifierExpr identifier
+  return $ IdentifierExpr identifier
 
-pLiteralInt :: Parser T.Expr
+pLiteralInt :: Parser Expr
 pLiteralInt = do
   literal <- satisfy isInt
   case literal of
-    TInt i -> return $ T.LiteralIntExpr i
+    TInt i -> return $ LiteralIntExpr i
     _ -> fail "Expected literal int"
 
-pIf :: Parser T.Expr
+pIf :: Parser Expr
 pIf = do
   _ <- single TIf
   condition <- pExpr
   trueBranch <- between (single TLeftBrace) (single TRightBrace) pExpr
   _ <- single TElse
   falseBranch <- between (single TLeftBrace) (single TRightBrace) pExpr
-  return $ T.IfExpr condition trueBranch falseBranch
+  return $ IfExpr condition trueBranch falseBranch
