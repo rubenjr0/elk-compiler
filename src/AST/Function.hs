@@ -39,17 +39,3 @@ data FunctionBody
   = SingleLineFunction Expr
   | BlockFunction Block
   deriving (Show, Eq)
-
-data Block = Block [Statement] Expr
-  deriving (Show, Eq)
-
-data Statement
-  = Assignment String Expr
-  | Return Expr
-  deriving (Show, Eq)
-
-data Expr
-  = Identifier String
-  | LiteralInt Int
-  | If Expr Expr Expr
-  deriving (Show, Eq)

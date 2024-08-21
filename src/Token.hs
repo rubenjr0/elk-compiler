@@ -2,6 +2,7 @@ module Token
   ( Token (..),
     isInt,
     isArrow,
+    isString,
     isUpperIdentifier,
     isIdentifier,
   )
@@ -75,3 +76,7 @@ isArrow _ = False
 isInt :: Token -> Bool
 isInt (TInt _) = True
 isInt _ = False
+
+isString :: Token -> Bool
+isString (TString _) = True
+isString _ = False

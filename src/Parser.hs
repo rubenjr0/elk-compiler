@@ -1,14 +1,24 @@
-module Parser (Parser, pType, pIdentifier, pUpperIdentifier) where
+module Parser
+  ( Parser,
+    pType,
+    pIdentifier,
+    pUpperIdentifier,
+    pString,
+    pBlock,
+    pExpr,
+    pStatement,
+  )
+where
 
 import AST.Type qualified as T
 import Data.Void (Void)
-import Text.Megaparsec qualified as MP
+import Text.Megaparsec (Parsec, between, many, satisfy, sepBy1, single, try, (<|>))
 import Token
 
-type Parser = MP.Parsec Void [Token]
+type Parser = Parsec Void [Token]
 
 pType :: Parser T.Type
-pType = MP.try (pFunctionType MP.<|> pNamedType)
+pType = try (pFunctionType <|> pNamedType)
 
 pNamedType :: Parser T.Type
 pNamedType = do
@@ -32,17 +42,24 @@ pNamedType = do
 
 pIdentifier :: Parser String
 pIdentifier = do
-  token <- MP.satisfy isIdentifier
+  token <- satisfy isIdentifier
   case token of
     TIdentifier name -> return name
     _ -> fail "Expected identifier"
 
 pUpperIdentifier :: Parser String
 pUpperIdentifier = do
-  token <- MP.satisfy isUpperIdentifier
+  token <- satisfy isUpperIdentifier
   case token of
     TUpperIdentifier name -> return name
     _ -> fail "Expected upper identifier"
+
+pString :: Parser String
+pString = do
+  token <- satisfy isString
+  case token of
+    TString name -> return name
+    _ -> fail "Expected string"
 
 pFunctionType :: Parser T.Type
 pFunctionType = do
@@ -52,7 +69,54 @@ pFunctionType = do
     _ -> return $ T.Function (init types) (last types)
 
 pFunctionArgs :: Parser [T.Type]
-pFunctionArgs = MP.sepBy1 (pNamedType MP.<|> pSubFunction) (MP.satisfy isArrow)
+pFunctionArgs = sepBy1 (pNamedType <|> pSubFunction) (satisfy isArrow)
 
 pSubFunction :: Parser T.Type
-pSubFunction = MP.between (MP.single TLeftParen) (MP.single TRightParen) pFunctionType
+pSubFunction = between (single TLeftParen) (single TRightParen) pFunctionType
+
+pBlock :: Parser T.Block
+pBlock = between (single TLeftBrace) (single TRightBrace) $ do
+  statements <- many $ try pStatement
+  expr <- pExpr
+  return $ T.Block statements expr
+
+pStatement :: Parser T.Statement
+pStatement = pAssignmentStatement <|> pReturnStatement
+
+pAssignmentStatement :: Parser T.Statement
+pAssignmentStatement = do
+  name <- pIdentifier
+  _ <- single TEqual
+  expr <- pExpr
+  _ <- single TSemiColon
+  return $ T.Assignment name expr
+
+pReturnStatement :: Parser T.Statement
+pReturnStatement = do
+  _ <- single TReturn
+  expr <- pExpr
+  return $ T.Return expr
+
+pExpr :: Parser T.Expr
+pExpr = pIdentifierExpr <|> pLiteralInt <|> pIf
+
+pIdentifierExpr :: Parser T.Expr
+pIdentifierExpr = do
+  identifier <- pIdentifier
+  return $ T.IdentifierExpr identifier
+
+pLiteralInt :: Parser T.Expr
+pLiteralInt = do
+  literal <- satisfy isInt
+  case literal of
+    TInt i -> return $ T.LiteralIntExpr i
+    _ -> fail "Expected literal int"
+
+pIf :: Parser T.Expr
+pIf = do
+  _ <- single TIf
+  condition <- pExpr
+  trueBranch <- between (single TLeftBrace) (single TRightBrace) pExpr
+  _ <- single TElse
+  falseBranch <- between (single TLeftBrace) (single TRightBrace) pExpr
+  return $ T.IfExpr condition trueBranch falseBranch

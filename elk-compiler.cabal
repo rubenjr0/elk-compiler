@@ -1,61 +1,51 @@
-cabal-version:      3.0
-name:               elk-compiler
-version:            0.0.1.0
-author:             Rubén J.R.
-maintainer:         rubenjr0@protonmail.com
--- copyright:
-category:           Language
-
-common warnings
-    ghc-options: -Wall
+cabal-version: 3.0
+name:          elk-compiler
+version:       0.0.1.0
+maintainer:    rubenjr0@protonmail.com
+author:        Rubén J.R.
+category:      Language
 
 library
-    import:           warnings
     exposed-modules:
         AST
-        , AST.Type
-        , AST.CustomType
-        , AST.Function
-        , Lexer
-        , Parser
-        , Parser.CustomType
-        , Parser.Function
-        , Token
-    -- other-modules:
-    -- other-extensions:
-    build-depends:
-        base ^>=4.20.0.0
-        , megaparsec >= 9.6.1 && < 9.7
-        , text >= 2.1.1 && < 2.2
+        AST.Type
+        AST.CustomType
+        AST.Function
+        Lexer
+        Parser
+        Parser.CustomType
+        Parser.Function
+        Parser.Program
+        Token
+
     hs-source-dirs:   src
     default-language: GHC2024
+    ghc-options:      -Wall
+    build-depends:
+        base ^>=4.20.0.0,
+        megaparsec >=9.6.1 && <9.7,
+        text >=2.1.1 && <2.2
 
 executable elk-compiler
-    import:           warnings
     main-is:          Main.hs
-    -- other-modules:
-    -- other-extensions:
-    build-depends:
-        base ^>=4.20.0.0
-        -- These two while used in main
-        , megaparsec >= 9.6.1 && < 9.7
-        , text >= 2.1.1 && < 2.2
-        , elk-compiler
-
     hs-source-dirs:   app
     default-language: GHC2024
+    ghc-options:      -Wall
+    build-depends:
+        base ^>=4.20.0.0,
+        megaparsec >=9.6.1 && <9.7,
+        text >=2.1.1 && <2.2,
+        elk-compiler
 
 test-suite elk-compiler-test
-    import:           warnings
-    default-language: GHC2024
-    -- other-modules:
-    -- other-extensions:
     type:             exitcode-stdio-1.0
-    hs-source-dirs:   test
     main-is:          Suite.hs
+    hs-source-dirs:   test
+    default-language: GHC2024
+    ghc-options:      -Wall
     build-depends:
-        base ^>=4.20.0.0
-        , megaparsec >= 9.6.1 && < 9.7
-        , text >= 2.1.1 && < 2.2
-        , hspec
-        , elk-compiler
+        base ^>=4.20.0.0,
+        megaparsec >=9.6.1 && <9.7,
+        text >=2.1.1 && <2.2,
+        hspec,
+        elk-compiler

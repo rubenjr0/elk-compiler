@@ -1,5 +1,8 @@
 module AST.Type
   ( Type (..),
+    Expr (..),
+    Block (..),
+    Statement (..),
   )
 where
 
@@ -23,4 +26,18 @@ data Type
   | Char
   | String
   | Unit
+  deriving (Show, Eq)
+
+data Block = Block [Statement] Expr
+  deriving (Show, Eq)
+
+data Statement
+  = Assignment String Expr
+  | Return Expr
+  deriving (Show, Eq)
+
+data Expr
+  = IdentifierExpr String
+  | LiteralIntExpr Int
+  | IfExpr Expr Expr Expr
   deriving (Show, Eq)
