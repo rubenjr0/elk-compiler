@@ -1,5 +1,6 @@
 module Token
   ( Token (..),
+    isInt,
     isArrow,
     isUpperIdentifier,
     isIdentifier,
@@ -15,15 +16,17 @@ data Token
   | -- Groupings
     TLeftParen
   | TRightParen
+  | TLeftBrace
+  | TRightBrace
   | TLeftBracket
   | TRightBracket
   | -- Symbols
-    TEquals
+    TEqual
   | TDot
   | TComma
   | TColon
-  | TSemicolon
-  | TUnderscore
+  | TSemiColon
+  | TUnderScore
   | TArrow
   | TPipe
   | TQuote
@@ -48,6 +51,9 @@ data Token
   | TMain
   | TMatch
   | TType
+  | TIf
+  | TElse
+  | TReturn
   | -- Extras
     TComment
   | TNewLine
@@ -65,3 +71,7 @@ isIdentifier _ = False
 isArrow :: Token -> Bool
 isArrow TArrow = True
 isArrow _ = False
+
+isInt :: Token -> Bool
+isInt (TInt _) = True
+isInt _ = False

@@ -2,12 +2,12 @@
 
 module Lexer (lexer) where
 
-import Token
 import Data.Text (Text)
 import Data.Void
 import Text.Megaparsec qualified as MP
 import Text.Megaparsec.Char qualified as MPC
 import Text.Megaparsec.Char.Lexer qualified as L
+import Token
 
 type Lexer = MP.Parsec Void Text
 
@@ -28,16 +28,18 @@ symbolLexer =
   MP.choice
     [ TLeftParen <$ symbol "(",
       TRightParen <$ symbol ")",
-      TLeftBracket <$ symbol "{",
-      TRightBracket <$ symbol "}",
+      TLeftBrace <$ symbol "{",
+      TRightBrace <$ symbol "}",
+      TLeftBracket <$ symbol "[",
+      TRightBracket <$ symbol "]",
       TComma <$ symbol ",",
-      TSemicolon <$ symbol ";",
+      TSemiColon <$ symbol ";",
       TColon <$ symbol ":",
       TDot <$ symbol ".",
       TArrow <$ symbol "->",
       TPipe <$ symbol "|>",
-      TEquals <$ symbol "=",
-      TUnderscore <$ symbol "_",
+      TEqual <$ symbol "=",
+      TUnderScore <$ symbol "_",
       TQuote <$ symbol "\""
     ]
 

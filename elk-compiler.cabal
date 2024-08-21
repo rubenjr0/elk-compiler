@@ -15,9 +15,11 @@ library
         AST
         , AST.Type
         , AST.CustomType
+        , AST.Function
         , Lexer
         , Parser
         , Parser.CustomType
+        , Parser.Function
         , Token
     -- other-modules:
     -- other-extensions:

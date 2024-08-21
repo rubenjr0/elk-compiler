@@ -5,16 +5,16 @@ where
 
 import AST.CustomType
 import Parser
-import qualified Text.Megaparsec as MP
+import Text.Megaparsec qualified as MP
 import Token
 
 pCustomType :: Parser CustomType
 pCustomType = do
   _ <- MP.single TType
   name <- pUpperIdentifier
-  _ <- MP.single TLeftBracket
+  _ <- MP.single TLeftBrace
   variants <- pVariant `MP.sepBy` MP.single TComma
-  _ <- MP.single TRightBracket
+  _ <- MP.single TRightBrace
   return $ CustomType name variants
 
 pVariant :: Parser Variant
