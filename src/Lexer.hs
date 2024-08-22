@@ -89,18 +89,33 @@ upperIdentifierLexer = lexeme $ do
     first <- MPC.upperChar
     rest <- MP.many MPC.alphaNumChar
     let ident = first : rest
-    return $ TUpperIdentifier ident
-
-boolLexer :: Lexer Token
-boolLexer = lexeme $ do
-    bool <-
-        MP.choice
-            [ True <$ symbol "true"
-            , False <$ symbol "false"
-            ]
-    return $ TBool bool
+    return $ case ident of
+        "True" -> TBool True
+        "False" -> TBool False
+        _ -> TUpperIdentifier ident
 
 -- TODO: numberLexer (Ints, Floats, support for underscores and formats)
+digitsWithUnderscores :: Lexer String
+digitsWithUnderscores = MP.some (MP.choice [MPC.digitChar, MPC.char '_']) >>= return . filter (/= '_')
+
+numberLexer :: Lexer Token
+numberLexer = MP.try (floatLexer MP.<|> intLexer)
+
+intLexer :: Lexer Token
+intLexer = lexeme $ do
+    num <-
+        MP.choice
+            [ L.decimal
+            , L.hexadecimal
+            , L.octal
+            , L.binary
+            ]
+    return $ TInt num
+
+floatLexer :: Lexer Token
+floatLexer = lexeme $ do
+    num <- MP.try L.float MP.<|> MP.try (L.signed sc L.float)
+    return $ TFloat num
 
 -- TODO: stringLexer (support for escape characters)
 
@@ -111,6 +126,7 @@ tokenLexer =
         , identifierLexer
         , upperIdentifierLexer
         , symbolLexer
+        , numberLexer
         , operatorLexer
         ]
 

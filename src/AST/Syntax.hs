@@ -7,7 +7,7 @@ where
 
 data Expr
     = IdentifierExpr String
-    | LiteralIntExpr Int
+    | LiteralIntExpr Integer
     | IfExpr Expr Expr Expr
     | BlockExpr Block
     deriving (Show, Eq)
