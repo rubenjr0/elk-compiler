@@ -1,7 +1,7 @@
 module AST.CustomType
-  ( CustomType (..),
-    Variant (..),
-  )
+    ( CustomType (..)
+    , Variant (..)
+    )
 where
 
 import AST.Type
@@ -11,13 +11,13 @@ import AST.Type
 -- type CustomType { field: TypeA, field: TypeB }
 
 data CustomType = CustomType
-  { custom_type_name :: String,
-    custop_type_variants :: [Variant]
-  }
-  deriving (Show, Eq)
+    { custom_type_name :: String
+    , custop_type_variants :: [Variant]
+    }
+    deriving (Show, Eq)
 
 data Variant = Variant
-  { variant_name :: String,
-    variant_fields :: [Type]
-  }
-  deriving (Show, Eq)
+    { variant_name :: String
+    , variant_fields :: [Type]
+    }
+    deriving (Show, Eq)

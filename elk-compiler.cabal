@@ -7,11 +7,11 @@ category:      Language
 
 library
     exposed-modules:
-        AST
         AST.Type
-        AST.Syntax
         AST.CustomType
         AST.Function
+        AST.Syntax
+        AST.Program
         Lexer
         Parser
         Parser.CustomType
@@ -40,8 +40,14 @@ executable elk-compiler
 
 test-suite elk-compiler-test
     type:             exitcode-stdio-1.0
-    main-is:          Suite.hs
+    main-is:          Spec.hs
     hs-source-dirs:   test
+    other-modules:
+        Parser.CustomTypeSpec
+        Parser.FunctionSpec
+        Parser.ProgramSpec
+        Parser.TypeSpec
+
     default-language: GHC2024
     ghc-options:      -Wall
     build-depends:
