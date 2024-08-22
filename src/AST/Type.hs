@@ -19,6 +19,9 @@ data Type
     | U64
     | F32
     | F64
+    | P8
+    | P16
+    | P32
     | Bool
     | Char
     | String

@@ -1,0 +1,8 @@
+type Flavor {
+  Orange
+  , Lemon
+}
+
+my_func : Flavor -> Bool;
+my_func Orange = True;
+my_func Lemon = False;

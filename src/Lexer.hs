@@ -71,6 +71,8 @@ keywordLexer =
         [ TMain <$ symbol "main"
         , TType <$ symbol "type"
         , TMatch <$ symbol "match"
+        , TIf <$ symbol "if"
+        , TImport <$ symbol "import"
         ]
 
 -- Identifier parser
@@ -88,6 +90,19 @@ upperIdentifierLexer = lexeme $ do
     rest <- MP.many MPC.alphaNumChar
     let ident = first : rest
     return $ TUpperIdentifier ident
+
+boolLexer :: Lexer Token
+boolLexer = lexeme $ do
+    bool <-
+        MP.choice
+            [ True <$ symbol "true"
+            , False <$ symbol "false"
+            ]
+    return $ TBool bool
+
+-- TODO: numberLexer (Ints, Floats, support for underscores and formats)
+
+-- TODO: stringLexer (support for escape characters)
 
 tokenLexer :: Lexer Token
 tokenLexer =

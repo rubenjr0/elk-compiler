@@ -1,0 +1,15 @@
+// Static tasks configuration.
+//
+// Example:
+[
+  {
+    "label": "Run",
+    "command": "cabal run exes",
+    "args": ["./syntax/basic.elk"],
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "never",
+    "shell": "system"
+  }
+]

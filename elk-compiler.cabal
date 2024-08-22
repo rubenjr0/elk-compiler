@@ -47,6 +47,7 @@ test-suite elk-compiler-test
         Parser.FunctionSpec
         Parser.ProgramSpec
         Parser.TypeSpec
+        LexerSpec
 
     default-language: GHC2024
     ghc-options:      -Wall

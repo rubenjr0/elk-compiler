@@ -11,9 +11,11 @@ where
 data Token
     = TIdentifier String
     | TUpperIdentifier String
-    | TInt Int
+    | -- Literals
+      TInt Integer
     | TFloat Float
     | TString String
+    | TBool Bool
     | -- Groupings
       TLeftParen
     | TRightParen

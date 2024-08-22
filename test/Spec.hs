@@ -1,3 +1,4 @@
+import LexerSpec qualified
 import Parser.CustomTypeSpec qualified
 import Parser.FunctionSpec qualified
 import Parser.ProgramSpec qualified
@@ -6,6 +7,7 @@ import Test.Hspec
 
 main :: IO ()
 main = hspec $ do
+    describe "Lexing" LexerSpec.spec
     describe "Parsing" $ do
         describe "Types" Parser.TypeSpec.spec
         describe "Custom Types" Parser.CustomTypeSpec.spec

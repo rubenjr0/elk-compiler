@@ -1,20 +1,28 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Main (main) where
 
-import Data.Text (pack)
+import Data.Text.IO qualified as TIO
 import Lexer
+import Parser.Program
 import System.Environment
-import Text.Megaparsec (runParser)
+import Text.Megaparsec (errorBundlePretty, parse)
+import Token
 
 main :: IO ()
 main = do
   args <- getArgs
-  path <- case args of
-    [path] -> return path
+  case args of
+    [path] -> lexFile path
     _ -> fail "Usage: ./compiler <path>"
-  contents <- readFile path
-  let src = pack contents
-  case runParser lexer path src of
-    Left err -> print err
-    Right tokens -> print tokens
+
+lexFile :: FilePath -> IO ()
+lexFile path = do
+  contents <- TIO.readFile path
+  case parse lexer path contents of
+    Left err -> print $ "Lexer error: " ++ errorBundlePretty err
+    Right tokens -> parseTokens tokens path
+
+parseTokens :: [Token] -> FilePath -> IO ()
+parseTokens tokens path = do
+  case parse pProgram path tokens of
+    Left err -> print $ "Parser error: " ++ show err
+    Right program -> print program
